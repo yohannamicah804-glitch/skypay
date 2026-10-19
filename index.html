@@ -1,0 +1,344 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#087b50">
+<title>SkyPay | Demo Wallet</title>
+
+<style>
+:root {
+  --green: #087b50;
+  --mint: #dff8ed;
+  --bg: #f3f7f5;
+  --text: #18342b;
+  --muted: #718078;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+button, input, select { font: inherit; }
+button { cursor: pointer; }
+header {
+  background: var(--green);
+  color: white;
+  padding: 22px 20px 28px;
+  border-radius: 0 0 26px 26px;
+}
+.top, .balance-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.logo { font-size: 24px; font-weight: 800; }
+.demo-label {
+  font-size: 11px;
+  border: 1px solid #b7f4d6;
+  padding: 6px 9px;
+  border-radius: 20px;
+}
+.balance-card {
+  margin-top: 25px;
+  padding: 19px;
+  border-radius: 18px;
+  background: #ffffff18;
+}
+.muted-white { color: #d5f2e4; font-size: 13px; }
+.balance { font-size: clamp(27px, 7vw, 36px); font-weight: bold; margin: 12px 0; }
+main { max-width: 680px; padding: 18px; margin: auto; }
+h2 { font-size: 19px; }
+.actions {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+}
+.action {
+  background: white;
+  border: 0;
+  border-radius: 15px;
+  padding: 15px 5px;
+  color: var(--text);
+  box-shadow: 0 3px 12px #102d1c08;
+}
+.action span { display: block; font-size: 24px; margin-bottom: 8px; }
+.action b { font-size: 12px; }
+.card {
+  background: white;
+  border-radius: 17px;
+  padding: 18px;
+  margin-top: 17px;
+  box-shadow: 0 3px 14px #102d1c08;
+}
+.card h2 { margin-top: 0; }
+label { display: block; font-size: 13px; margin: 14px 0 6px; }
+input, select {
+  display: block;
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d5e0d9;
+  border-radius: 10px;
+  background: white;
+  color: var(--text);
+}
+.primary {
+  width: 100%;
+  padding: 14px;
+  border: 0;
+  border-radius: 11px;
+  background: var(--green);
+  color: white;
+  font-weight: bold;
+  margin-top: 15px;
+}
+.secondary {
+  padding: 10px 13px;
+  border: 0;
+  border-radius: 9px;
+  background: var(--mint);
+  color: var(--green);
+}
+.notice {
+  padding: 12px;
+  background: #fff6d9;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #66521b;
+  margin-top: 16px;
+}
+#message { font-size: 13px; line-height: 1.5; }
+.transaction {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 0;
+  border-bottom: 1px solid #edf1ee;
+}
+.transaction:last-child { border-bottom: 0; }
+.tx-icon {
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--mint);
+  font-size: 20px;
+}
+.tx-details { flex: 1; min-width: 0; }
+.tx-details b { font-size: 14px; }
+.tx-details small { display: block; color: var(--muted); margin-top: 5px; }
+.tx-amount { font-weight: bold; font-size: 13px; }
+.income { color: var(--green); }
+.empty { color: var(--muted); font-size: 14px; }
+footer { text-align: center; color: var(--muted); font-size: 12px; padding: 24px; }
+@media (max-width: 390px) {
+  main { padding: 12px; }
+  .actions { gap: 6px; }
+  .action b { font-size: 10px; }
+}
+</style>
+</head>
+
+<body>
+<header>
+  <div class="top">
+    <div class="logo">☁ SkyPay</div>
+    <div class="demo-label">DEMO ACCOUNT</div>
+  </div>
+  <div class="balance-card">
+    <div class="balance-row">
+      <span class="muted-white">Demo wallet balance</span>
+      <button class="secondary" onclick="toggleBalance()">Hide</button>
+    </div>
+    <div class="balance" id="balance">₦125,000.00</div>
+    <div class="muted-white">Illustrative balance · Not real money</div>
+  </div>
+</header>
+
+<main>
+  <h2>Quick actions</h2>
+  <div class="actions">
+    <button class="action" onclick="showForm('transfer')">
+      <span>↗</span><b>Transfer</b>
+    </button>
+    <button class="action" onclick="showForm('airtime')">
+      <span>▣</span><b>Airtime</b>
+    </button>
+    <button class="action" onclick="showForm('bills')">
+      <span>▤</span><b>Bills</b>
+    </button>
+    <button class="action" onclick="showForm('deposit')">
+      <span>＋</span><b>Add money</b>
+    </button>
+  </div>
+
+  <section class="card" id="workspace">
+    <h2>Welcome to SkyPay!</h2>
+    <p>Choose an action above to explore your demo wallet.</p>
+    <p class="empty">This app does not connect to a bank or payment network.</p>
+  </section>
+
+  <section class="card">
+    <div class="balance-row">
+      <h2>Recent transactions</h2>
+      <button class="secondary" onclick="clearHistory()">Clear</button>
+    </div>
+    <div id="history"><p class="empty">No transactions yet.</p></div>
+  </section>
+
+  <div class="notice">
+    <b>Educational demo only.</b> All funds and transactions are simulated.
+    Do not enter real bank details, card numbers, passwords, or PINs.
+    Demo data is kept only in this page's memory and resets when the page reloads.
+  </div>
+</main>
+
+<footer>SkyPay © 2026 · Independent demo project</footer>
+
+<script>
+let balance = 125000;
+let transactions = [];
+let balanceVisible = true;
+
+const money = n => "₦" + Math.abs(n).toLocaleString("en-NG", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
+
+function update() {
+  document.getElementById("balance").textContent =
+    balanceVisible ? money(balance) : "₦••••••";
+  const history = document.getElementById("history");
+
+  if (!transactions.length) {
+    history.innerHTML = '<p class="empty">No transactions yet.</p>';
+    return;
+  }
+
+  history.replaceChildren();
+  transactions.forEach(t => {
+    const row = document.createElement("div");
+    row.className = "transaction";
+
+    const icon = document.createElement("div");
+    icon.className = "tx-icon";
+    icon.textContent = t.amount > 0 ? "↙" : "↗";
+
+    const details = document.createElement("div");
+    details.className = "tx-details";
+    const title = document.createElement("b");
+    title.textContent = t.name;
+    const date = document.createElement("small");
+    date.textContent = t.date + " · Simulated";
+    details.append(title, date);
+
+    const amount = document.createElement("div");
+    amount.className = "tx-amount " +
+      (t.amount > 0 ? "income" : "");
+    amount.textContent =
+      (t.amount > 0 ? "+" : "−") + money(t.amount);
+
+    row.append(icon, details, amount);
+    history.append(row);
+  });
+}
+
+function toggleBalance() {
+  balanceVisible = !balanceVisible;
+  update();
+}
+
+function showForm(type) {
+  const titles = {
+    transfer: "Send demo money",
+    airtime: "Buy demo airtime",
+    bills: "Demo bill payment",
+    deposit: "Add demo money"
+  };
+
+  const recipientFields = {
+    transfer: '<label>Recipient name</label><input id="recipient" maxlength="60" placeholder="Enter a name">',
+    airtime: '<label>Phone number</label><input id="recipient" maxlength="15" placeholder="Demo phone number">',
+    bills: '<label>Bill type</label><select id="recipient"><option>Electricity</option><option>Internet</option><option>Television</option></select>',
+    deposit: ""
+  };
+
+  document.getElementById("workspace").innerHTML = `
+    <h2>${titles[type]}</h2>
+    ${recipientFields[type]}
+    <label>Amount (NGN)</label>
+    <input id="amount" type="number" min="1" max="100000000"
+      step="1" placeholder="Enter amount">
+    <button class="primary" id="submitAction">Simulate transaction</button>
+    <p id="message" role="status"></p>
+    <p class="empty">This action will not move real money.</p>
+  `;
+
+  document.getElementById("submitAction").onclick = () =>
+    performAction(type);
+}
+
+function performAction(type) {
+  const amount = Number(document.getElementById("amount").value);
+  const message = document.getElementById("message");
+  const recipient = type === "deposit"
+    ? "Demo deposit"
+    : document.getElementById("recipient").value.trim();
+
+  if (!Number.isSafeInteger(amount) || amount <= 0 ||
+      amount > 100000000) {
+    message.textContent = "Enter a valid whole amount in naira.";
+    return;
+  }
+
+  if (type !== "deposit" && !recipient) {
+    message.textContent = "Please complete the recipient field.";
+    return;
+  }
+
+  if (type !== "deposit" && amount > balance) {
+    message.textContent = "Insufficient demo balance.";
+    return;
+  }
+
+  balance += type === "deposit" ? amount : -amount;
+
+  const labels = {
+    transfer: "Transfer to ",
+    airtime: "Airtime for ",
+    bills: "Bill payment: "
+  };
+
+  transactions.unshift({
+    name: type === "deposit"
+      ? "Demo deposit"
+      : labels[type] + recipient,
+    amount: type === "deposit" ? amount : -amount,
+    date: new Date().toLocaleString()
+  });
+
+  update();
+
+  document.getElementById("workspace").innerHTML = `
+    <h2>✓ Demo transaction recorded</h2>
+    <p>${type === "deposit"
+      ? "Sample money added to your demo wallet."
+      : "Your simulated payment was recorded."}</p>
+    <p><b>Amount:</b> ${money(amount)}</p>
+    <p class="empty">No real money was moved and no payment was made.</p>
+    <button class="primary" onclick="showForm('transfer')">New demo transfer</button>
+  `;
+}
+
+function clearHistory() {
+  transactions = [];
+  update();
+}
+</script>
+</body>
+</html>
